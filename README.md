@@ -13,6 +13,16 @@
 - It is low level (raw) form of data and is also human readable.
 - It helps developers in faster coding, in-turn reduces development cost.
 
+## Screenshots: ##
+![](images/Screenshot%20(849).png)
 
+![](images/Screenshot%20(851).png)
 
+![](images/register%20(1).jpeg)
+
+![](images/update.jpeg)
+
+![](images/Screenshot%20(854).png)
+
+![](images/Screenshot%20(855).png)
 
