@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script
+src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="http://login2explore.com/jpdb/resources/js/0.0.3/jpdb-commons.js"></script>
+    <title>Update </title>
+</head>
+<body>
+  <div class="navbar">
+    <a class="alink" href="index.html">Home</a>
+    <a class="alink" href="Registration.html">Register</a>
+    <a class="alink" href="show.html">Search</a>
+    <a class="alink" href="remove.html">Remove</a>
+  </div>
+    <h1>Update Record</h1>
+    <h2>**Student Id should be given correctly. Whatever value you want to update, Update that value and for other values just pass the previous value.**</h2>
+    <div class="form">
+    
+        <div class="container">
+          <form id="stuForm" method="POST">
+            <div class="row">
+                <div class="col-25">
+                  <label for="stuId">Student Id</label>
+                </div>
+                <div class="col-75">
+                  <input type="text" id="stuId" name="stuId" placeholder="Your Student id"required>
+                </div>
+              </div>
+            <div class="row">
+              <div class="col-25">
+                <label for="fname">Name</label>
+              </div>
+              <div class="col-75">
+                <input type="text" id="fname" name="fname" placeholder="Your name..">
+              </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+            <label for="mobile">Mobile no.</label>
+              </div>
+              <div class="col-75">
+                <input type="text" id="mobile" name="mobile" placeholder="moile no..">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-25">
+                <label for="email">E-mail</label>
+              </div>
+              <div class="col-75">
+                <input type="text" id="email" name="email" placeholder="abc@gmail.com">
+              </div>
+            </div>
+            <br>
+            <br>
+           
+            <div class="row">
+                <div class="col-25">
+              <input type="button" value="Update" id="stuSave" onclick="updateStudent();" >
+              </div>
+            </div>
+        </form>
+        </div>
+        </div>
+        <script>
+    $("#stuId").focus();
+
+      function validateAndGetFormData() {
+       var stuIdVar = $("#stuId").val();
+       if (stuIdVar === "") {
+          alert("Student ID Required Value");
+          $("#stuId").focus();
+         return "";
+        }
+
+        var stuNameVar = $("#fname").val();
+          if (stuNameVar === "") {
+              alert("Student Name is Required Value");
+               $("#fname").focus();
+              return "";
+         }
+      var stuEmailVar = $("#email").val();
+       if (stuEmailVar === "") {
+         alert("Student Email is Required Value");
+          $("#email").focus();
+          return "";
+    }
+      var stuPhnVar= $("#mobile").val();
+       if(stuPhnVar === ""){
+           alert("Student Phone is Required Value");
+           $("#mobile").focus();
+          return "";
+       }
+         var jsonStrObj = {
+                StudentId: stuIdVar,
+               Name: stuNameVar,
+               MobileNo:stuPhnVar,
+               Email: stuEmailVar,
+            };
+      return JSON.stringify(jsonStrObj);
+ }
+         function executeCommand(reqString, dbBaseUrl, apiEndPointUrl) {
+               var url = dbBaseUrl + apiEndPointUrl;
+              var jsonObj;
+           $.post(url, reqString, function (result) {
+          jsonObj = JSON.parse(result);
+         }).fail(function (result) {
+         var dataJsonObj = result.responseText;
+       jsonObj = JSON.parse(dataJsonObj);
+        });
+      return jsonObj;
+      }
+     function resetForm() {
+         $("#stuId").val("")
+        $("#fname").val("");
+        $("#email").val("");
+        $("#mobile").val("");
+        $("#stuId").focus();
+        }
+            function updateStudent() {
+              var jsonStr = validateAndGetFormData();
+         if (jsonStr === "") {
+            return;
+         }
+         var reqId= $("#stuId").val();
+         var updateReqStr= createUPDATERecordRequest("90935986|-", jsonStr, "STUDENT", "STU-DETAILS", reqId);
+       
+           alert(updateReqStr);
+       jQuery.ajaxSetup({async: false});
+      var resultObj = executeCommand(updateReqStr,"http://api.login2explore.com:5577", "/api/iml");
+        alert(JSON.stringify(resultObj));
+        jQuery.ajaxSetup({async: true});
+         
+         alert("Data updated.. You can see the details on search Page and confirm..");
+         resetForm();
+      }
+        </script>
+  
+</body>
+</html>

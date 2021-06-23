@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script
+src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="http://login2explore.com/jpdb/resources/js/0.0.3/jpdb-commons.js"></script>
+    <title>Mini Project</title>
+</head>
+<body>
+  <div class="navbar">
+    <a class="alink" href="index.html">Home</a>
+    <a class="alink"  href="update.html">Update</a>
+    <a class="alink" href="show.html">Search</a>
+    <a class="alink"  href="remove.html">Remove</a>
+  </div>
+    <h1><strong>STUDENT &nbsp;  REGISTRATION &nbsp;  FORM</strong></h1>
+    <div class="form">
+    
+        <div class="container">
+          <form id="stuForm" method="POST">
+            <div class="row">
+                <div class="col-25">
+                  <label for="stuId">Student Id</label>
+                </div>
+                <div class="col-75">
+                  <input type="text" id="stuId" name="stuId" placeholder="Your Student id"required>
+                </div>
+              </div>
+            <div class="row">
+              <div class="col-25">
+                <label for="fname">Name</label>
+              </div>
+              <div class="col-75">
+                <input type="text" id="fname" name="fname" placeholder="Your name.."required>
+              </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+            <label for="mobile">Mobile no.</label>
+              </div>
+              <div class="col-75">
+                <input type="text" id="mobile" name="mobile" placeholder="moile no.."required>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-25">
+                <label for="email">E-mail</label>
+              </div>
+              <div class="col-75">
+                <input type="text" id="email" name="email" placeholder="abc@gmail.com"required>
+              </div>
+            </div>
+            <br>
+            <br>
+           
+            <div class="row">
+                <div class="col-25">
+              <input type="button" value="Save" id="stuSave" onclick="saveStudent();" >
+              </div>
+            </div>
+        </form>
+        </div>
+        </div>
+      
+  <script>
+     $("#stuId").focus();
+
+      function validateAndGetFormData() {
+       var stuIdVar = $("#stuId").val();
+       if (stuIdVar === "") {
+          alert("Student ID Required Value");
+          $("#stuId").focus();
+         return "";
+        }
+
+        var stuNameVar = $("#fname").val();
+          if (stuNameVar === "") {
+              alert("Student Name is Required Value");
+               $("#fname").focus();
+              return "";
+         }
+      var stuEmailVar = $("#email").val();
+       if (stuEmailVar === "") {
+         alert("Student Email is Required Value");
+          $("#email").focus();
+          return "";
+    }
+      var stuPhnVar= $("#mobile").val();
+       if(stuPhnVar === ""){
+           alert("Student Phone is Required Value");
+           $("#mobile").focus();
+          return "";
+       }
+         var jsonStrObj = {
+                StudentId: stuIdVar,
+               Name: stuNameVar,
+               MobileNo:stuPhnVar,
+               Email: stuEmailVar,
+            };
+      return JSON.stringify(jsonStrObj);
+ }
+ function createPUTRequest(connToken, jsonObj, dbName, relName) {
+   var putRequest = "{\n"
++ "\"token\" : \""
++ connToken
++ "\","
++ "\"dbName\": \""
++ dbName
++ "\",\n" + "\"cmd\" : \"PUT\",\n"
++ "\"rel\" : \""
++ relName + "\","
++ "\"jsonStr\": \n"
++ jsonObj
++ "\n"
++ "}";
+return putRequest;
+}
+      function executeCommand(reqString, dbBaseUrl, apiEndPointUrl) {
+var url = dbBaseUrl + apiEndPointUrl;
+var jsonObj;
+$.post(url, reqString, function (result) {
+jsonObj = JSON.parse(result);
+}).fail(function (result) {
+var dataJsonObj = result.responseText;
+jsonObj = JSON.parse(dataJsonObj);
+});
+return jsonObj;
+}
+function resetForm() {
+$("#stuId").val("")
+$("#fname").val("");
+$("#email").val("");
+$("#mobile").val("");
+$("#stuId").focus();
+}
+function saveStudent() {var jsonStr = validateAndGetFormData();
+if (jsonStr === "") {
+return;
+}
+var putReqStr = createPUTRequest("90935986|",
+jsonStr, "STUDENT", "STU-DETAILS");
+alert(putReqStr);
+jQuery.ajaxSetup({async: false});
+var resultObj = executeCommand(putReqStr,
+"http://api.login2explore.com:5577", "/api/iml");
+alert(JSON.stringify(resultObj));
+jQuery.ajaxSetup({async: true});
+alert("Data  Uploaded");
+resetForm();
+}
+
+
+  </script>
+</body>
+</html>
